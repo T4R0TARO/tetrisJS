@@ -51,8 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
       [width,width+1,width+2,width+3]
     ]
   
+    //Contains the default shapes of the game
     const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino]
   
+    //Set default position on grid 
     let currentPosition = 4
     let currentRotation = 0
   
@@ -71,6 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
     //undraw the Tetromino
+    function undraw() {
+      current.forEach(index => {
+        squares[currentPositon + index].classList.remove('tetromino')
+        sqaures[currentPosition + index].style.backgroundColor = ''
+      })
+    }
 
   
     //assign functions to keyCodes
