@@ -91,7 +91,76 @@ function moveLeft() {
 }
 
 function moveRight() {
-    
+    // remove the tetromino
+    undraw()
+    // when the tetromino is at the far right edge of the grid 
+    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1)
+    // if NOT at the right edge then move 1 position
+    if(!isAtRightEdge) currentPosition += 1
+    // if the current tetromino is on a square with class of contains then it will add `contains` as a class
+    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+        currentPosition -=1
+    }
+    // draw the tetromino on to the grid 
+    draw()
 }
 
+//FIX ROTATION OF TETROMINOS AT THE EDGE
+function isAtRight() {
+    return current.some(index => (currentPosition + index + 1) % width === 0)
+}
+
+function isAtLeft() {
+    return current.some(index => (currentPositon + index) % width === 0)
+}
+
+function checkRotatedPosition(P){
+    P = P || currentPosition
+    if ((P+1) % width < 4) {
+        if(isAtRight()){
+            currentPositon += 1
+            checkRotatedPosition(P)
+        }
+    } else if ( P % width > 5) {
+        if (isAtLeft()){
+            currentPosition -= 1
+            checkRotationPosition(P)
+        }
+    }
+}
+
+// rotate the tetromino 
+function rotate() {
+    // removes tetromino from grid
+    undraw()
+    // add to current rotation
+    currentRotation ++
+    // when you make a full rotation return to starting rotation
+    if(currentRotation === current.length) { // if the current rotation gets to 4, make it go back to 0
+        currentRotation = 0
+    }
+    //
+    current = theTetrominoes[random][currentRotation]
+    // check rotated postion if its near edge 
+    checkRotatedPosition()
+    // draw the tetromino back onto the grid
+    draw()
+}
 ```
+
+### Display the shape in the mini-grid display
+```js
+function displayShape(){
+    // Removes current shape on grid
+    displaySquares.forEach(square => {
+        sqaure.classList.remove('tetromino')
+        square.style.backgroundColor = ''
+    })
+    // add next random shape on the display mini-grade
+    upNextTetrominoes[nextRandom].forEach( index => {
+        displaySquares[displayIndex + index].classList.add('tetromino')
+        displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom]
+    })
+}
+```
+
